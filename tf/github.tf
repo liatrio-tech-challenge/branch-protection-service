@@ -10,14 +10,14 @@ resource "github_organization_webhook" "branch_protection_service" {
   events = ["repository"]
 }
 
-resource "github_organization_webhook" "test" {
+resource "github_organization_webhook" "bps_dev" {
   configuration {
     url          = "https://ghe-org-mgmt.ngrok.io"
     content_type = "json"
     insecure_ssl = false
   }
 
-  active = false
+  active = true
 
   events = ["repository"]
 }
