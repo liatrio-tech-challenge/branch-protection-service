@@ -33,5 +33,8 @@ resource "azurerm_function_app" "branch_protection_service" {
   app_settings = {
     WEBHOOK_SECRET : var.github_webhook_secret
     GITHUB_TOKEN : var.github_enforcer_pat
+    FUNCTIONS_WORKER_RUNTIME : "node"
+    WEBSITE_RUN_FROM_PACKAGE: ""
+    WEBSITE_NODE_DEFAULT_VERSION: "node|14"
   }
 }
