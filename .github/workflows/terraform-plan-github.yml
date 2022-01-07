@@ -22,10 +22,12 @@ jobs:
           terraform validate
         working-directory: tf
         env:
+          GITHUB_TOKEN:  ${{ secrets.ORG_HOOK_PAT }}
           ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+          TF_VAR_github_webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
   
   plan:
     name: Terraform Plan
@@ -48,10 +50,12 @@ jobs:
         id: plan
         working-directory: tf
         env:
+          GITHUB_TOKEN:  ${{ secrets.ORG_HOOK_PAT }}
           ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+          TF_VAR_github_webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
 
       - name: Comment on pull request
         uses: actions/github-script@v3
