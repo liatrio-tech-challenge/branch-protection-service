@@ -9,7 +9,7 @@ env:
   APP_PACKAGE_PATH: .
 
 jobs:
-  apply:
+  infra-deploy:
     name: Terraform Apply
     runs-on:
       - ubuntu-latest
@@ -34,7 +34,7 @@ jobs:
           TF_VAR_github_enforcer_pat: ${{ secrets.ENFORCER_PAT }}
           TF_VAR_function_app_name: ${{ env.AZURE_FUNCTION_APP_NAME }}
 
-  deploy:
+  app-deploy:
     name: App Deploy
     runs-on:
       - ubuntu-latest
