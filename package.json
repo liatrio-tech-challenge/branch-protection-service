@@ -1,0 +1,9 @@
+{
+  "name": "branch-protection-service",
+  "version": "1.0.0",
+  "description": "Automatically protect default branches upon repository creation",
+  "main": "branch-protection/index.js",
+  "repository": "git@github.com:liatrio-tech-challenge/branch-protection-service.git",
+  "author": "Liatrio",
+  "private": true
+}
