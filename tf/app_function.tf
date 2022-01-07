@@ -12,7 +12,7 @@ resource "azurerm_storage_account" "branch_protection_service" {
 }
 
 resource "azurerm_app_service_plan" "branch_protection_service" {
-  name                = "github-branch-protection-service"
+  name                = var.function_app_name
   location            = azurerm_resource_group.github_tech_challenge.location
   resource_group_name = azurerm_resource_group.github_tech_challenge.name
 
@@ -23,10 +23,18 @@ resource "azurerm_app_service_plan" "branch_protection_service" {
 }
 
 resource "azurerm_function_app" "branch_protection_service" {
-  name                       = "github-branch-protection-service"
+  name                       = var.function_app_name
   location                   = azurerm_resource_group.github_tech_challenge.location
   resource_group_name        = azurerm_resource_group.github_tech_challenge.name
   app_service_plan_id        = azurerm_app_service_plan.branch_protection_service.id
   storage_account_name       = azurerm_storage_account.branch_protection_service.name
   storage_account_access_key = azurerm_storage_account.branch_protection_service.primary_access_key
+
+  app_settings = {
+    WEBHOOK_SECRET : var.github_webhook_secret
+    GITHUB_TOKEN : var.github_enforcer_pat
+    FUNCTIONS_WORKER_RUNTIME : "node"
+    WEBSITE_RUN_FROM_PACKAGE : ""
+    WEBSITE_NODE_DEFAULT_VERSION : "node|14"
+  }
 }

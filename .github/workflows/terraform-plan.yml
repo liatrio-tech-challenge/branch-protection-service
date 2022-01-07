@@ -1,8 +1,18 @@
 on:
   pull_request:
+    paths-ignore:
+      - "**/*.md"
     branches:
       - main
   workflow_dispatch:
+
+name: Terraform Plan
+
+concurrency:
+  group: terraform
+
+env:
+    AZURE_FUNCTION_APP_NAME: github-branch-protection-service
 
 jobs:
   validate:
@@ -28,9 +38,11 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
           TF_VAR_github_webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
-  
+          TF_VAR_github_enforcer_pat: ${{ secrets.ENFORCER_PAT }}
+          TF_VAR_function_app_name: ${{ env.AZURE_FUNCTION_APP_NAME }}
+
   plan:
-    name: Terraform Plan
+    name: Terraform plan
     runs-on:
       - ubuntu-latest
     outputs:
@@ -40,7 +52,7 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v2
 
-      - name: Terraform Plan
+      - name: Terraform plan
         run: |
           set -o pipefail
           terraform init
@@ -56,6 +68,8 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
           TF_VAR_github_webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
+          TF_VAR_github_enforcer_pat: ${{ secrets.ENFORCER_PAT }}
+          TF_VAR_function_app_name: ${{ env.AZURE_FUNCTION_APP_NAME }}
 
       - name: Comment on pull request
         uses: actions/github-script@v3
