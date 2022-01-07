@@ -1,0 +1,83 @@
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: "Terraform fmt & validate"
+    runs-on:
+      - ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Terraform fmt check
+        run: terraform fmt -check -recursive -diff
+
+      - name: Terraform validate
+        run: |
+          terraform init
+          terraform validate
+        working-directory: tf
+        env:
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  
+  plan:
+    name: Terraform Plan
+    runs-on:
+      - ubuntu-latest
+    outputs:
+      modified_terraform: ${{ steps.plan.outputs.modified_terraform }}
+    needs: validate
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Terraform Plan
+        run: |
+          set -o pipefail
+          terraform init
+          terraform plan | tee plan.txt
+          grep "Plan:" plan.txt > summary.txt
+          echo "##[set-output name=modified_terraform;]$(cat plan.txt | grep "No changes. Infrastructure is up-to-date." || true)"
+        id: plan
+        working-directory: tf
+        env:
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+      - name: Comment on pull request
+        uses: actions/github-script@v3
+        with:
+          script: |
+            const fs = require('fs');
+            const color_code_regex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
+
+            var summary = fs.readFileSync('tf/summary.txt').toString().replace(color_code_regex, '');
+            var plan = fs.readFileSync('tf/plan.txt').toString().replace(color_code_regex, '');
+
+            if(plan.length > 65000){
+              plan = `Plan too long, truncating:\n...\n${plan.slice(-65000)}`;
+            }
+
+            const output = `
+            #### Terraform Plan \`${{ steps.plan.outcome }}\`
+            <details><summary>${summary}</summary>
+
+            \`\`\`
+            ${plan}
+            \`\`\`
+            </details>`;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
