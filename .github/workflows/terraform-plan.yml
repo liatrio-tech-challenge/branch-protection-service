@@ -6,6 +6,9 @@ on:
 
 name: Terraform Plan
 
+concurrency:
+  group: terraform
+
 env:
     AZURE_FUNCTION_APP_NAME: github-branch-protection-service
 
