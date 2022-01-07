@@ -42,7 +42,7 @@ jobs:
           TF_VAR_function_app_name: ${{ env.AZURE_FUNCTION_APP_NAME }}
 
   app-deploy:
-    name: App Deploy
+    name: App deploy
     runs-on:
       - ubuntu-latest
     steps:
