@@ -9,3 +9,9 @@ variable "github_webhook_secret" {
   description = "Shared secret for GitHub webhook"
   sensitive   = true
 }
+
+variable "github_enforcer_pat" {
+  type        = string
+  description = "PAT for the protection service to use to enforce protections"
+  sensitive   = true
+}

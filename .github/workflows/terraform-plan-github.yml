@@ -28,7 +28,8 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
           TF_VAR_github_webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
-  
+          TF_VAR_github_enforcer_pat: ${{ secrets.ENFORCER_PAT }}
+
   plan:
     name: Terraform Plan
     runs-on:
@@ -56,6 +57,7 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
           TF_VAR_github_webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
+          TF_VAR_github_enforcer_pat: ${{ secrets.ENFORCER_PAT }}
 
       - name: Comment on pull request
         uses: actions/github-script@v3
