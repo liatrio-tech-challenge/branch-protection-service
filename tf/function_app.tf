@@ -15,7 +15,7 @@ resource "azurerm_app_service_plan" "branch_protection_service" {
   name                = var.function_app_name
   location            = azurerm_resource_group.github_tech_challenge.location
   resource_group_name = azurerm_resource_group.github_tech_challenge.name
-  kind                = "Linux"
+  kind                = "FunctionApp"
   reserved            = true
 
   sku {
@@ -31,6 +31,8 @@ resource "azurerm_function_app" "branch_protection_service" {
   app_service_plan_id        = azurerm_app_service_plan.branch_protection_service.id
   storage_account_name       = azurerm_storage_account.branch_protection_service.name
   storage_account_access_key = azurerm_storage_account.branch_protection_service.primary_access_key
+
+
 
   site_config {
     linux_fx_version = "node|14"
@@ -48,6 +50,7 @@ resource "azurerm_function_app" "branch_protection_service" {
   lifecycle {
     ignore_changes = [
       app_settings["WEBSITE_RUN_FROM_PACKAGE"],
+      app_settings["WEBSITE_ENABLE_SYNC_UPDATE_SITE"],
     ]
   }
 }
