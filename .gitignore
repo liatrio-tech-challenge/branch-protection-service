@@ -1,8 +1,10 @@
-# Local .terraform directories
 **/.terraform
-
-# .tfstate files
 terraform.tfstate
 .tfstate
 *.tfstate
 *.tfstate.*
+
+.idea/
+local.settings.json
+node_modules
+dist
