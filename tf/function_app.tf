@@ -32,11 +32,10 @@ resource "azurerm_function_app" "branch_protection_service" {
   storage_account_name       = azurerm_storage_account.branch_protection_service.name
   storage_account_access_key = azurerm_storage_account.branch_protection_service.primary_access_key
 
-
-
   site_config {
     linux_fx_version = "node|14"
   }
+
   os_type = "linux"
   version = "~3"
 
