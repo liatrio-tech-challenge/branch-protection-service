@@ -51,31 +51,31 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
-#      - name: Comment on pull request
-#        uses: actions/github-script@v3
-#        with:
-#          script: |
-#            const fs = require('fs');
-#            const color_code_regex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
-#
-#            var summary = fs.readFileSync('summary.txt').toString().replace(color_code_regex, '');
-#            var plan = fs.readFileSync('plan.txt').toString().replace(color_code_regex, '');
-#
-#            if(plan.length > 65000){
-#              plan = `Plan too long, truncating:\n...\n${plan.slice(-65000)}`;
-#            }
-#
-#            const output = `
-#            #### Terraform Plan \`${{ steps.plan.outcome }}\`
-#            <details><summary>${summary}</summary>
-#
-#            \`\`\`
-#            ${plan}
-#            \`\`\`
-#            </details>`;
-#            github.issues.createComment({
-#              issue_number: context.issue.number,
-#              owner: context.repo.owner,
-#              repo: context.repo.repo,
-#              body: output
-#            })
+      - name: Comment on pull request
+        uses: actions/github-script@v3
+        with:
+          script: |
+            const fs = require('fs');
+            const color_code_regex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
+
+            var summary = fs.readFileSync('summary.txt').toString().replace(color_code_regex, '');
+            var plan = fs.readFileSync('plan.txt').toString().replace(color_code_regex, '');
+
+            if(plan.length > 65000){
+              plan = `Plan too long, truncating:\n...\n${plan.slice(-65000)}`;
+            }
+
+            const output = `
+            #### Terraform Plan \`${{ steps.plan.outcome }}\`
+            <details><summary>${summary}</summary>
+
+            \`\`\`
+            ${plan}
+            \`\`\`
+            </details>`;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
