@@ -71,33 +71,33 @@ jobs:
           TF_VAR_github_enforcer_pat: ${{ secrets.ENFORCER_PAT }}
           TF_VAR_function_app_name: ${{ env.AZURE_FUNCTION_APP_NAME }}
 
-      - name: Comment on pull request
-        uses: actions/github-script@v3
-        if: ${{ env.TF_PLAN_HAS_CHANGES }}
-        with:
-          script: |
-            const fs = require('fs');
-            const color_code_regex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
-
-            var summary = fs.readFileSync('tf/summary.txt').toString().replace(color_code_regex, '');
-            var plan = fs.readFileSync('tf/plan.txt').toString().replace(color_code_regex, '');
-
-            if(plan.length > 65000){
-              plan = `Plan too long, truncating:\n...\n${plan.slice(-65000)}`;
-            }
-
-            const output = `
-            #### Terraform Plan \`${{ steps.plan.outcome }}\`
-            <details><summary>${summary}</summary>
-
-            \`\`\`
-            ${plan}
-            \`\`\`
-            </details>`;
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
+#      - name: Comment on pull request
+#        uses: actions/github-script@v3
+#        if: ${{ env.TF_PLAN_HAS_CHANGES }}
+#        with:
+#          script: |
+#            const fs = require('fs');
+#            const color_code_regex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
+#
+#            var summary = fs.readFileSync('tf/summary.txt').toString().replace(color_code_regex, '');
+#            var plan = fs.readFileSync('tf/plan.txt').toString().replace(color_code_regex, '');
+#
+#            if(plan.length > 65000){
+#              plan = `Plan too long, truncating:\n...\n${plan.slice(-65000)}`;
+#            }
+#
+#            const output = `
+#            #### Terraform Plan \`${{ steps.plan.outcome }}\`
+#            <details><summary>${summary}</summary>
+#
+#            \`\`\`
+#            ${plan}
+#            \`\`\`
+#            </details>`;
+#            github.issues.createComment({
+#              issue_number: context.issue.number,
+#              owner: context.repo.owner,
+#              repo: context.repo.repo,
+#              body: output
+#            })
         
