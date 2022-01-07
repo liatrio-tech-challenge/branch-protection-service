@@ -21,6 +21,7 @@ jobs:
         id: apply
         working-directory: tf
         env:
+          GITHUB_TOKEN:  ${{ secrets.ORG_HOOK_PAT }}
           ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
