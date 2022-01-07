@@ -15,7 +15,7 @@ resource "azurerm_app_service_plan" "branch_protection_service" {
   name                = var.function_app_name
   location            = azurerm_resource_group.github_tech_challenge.location
   resource_group_name = azurerm_resource_group.github_tech_challenge.name
-  kind                = "Linux"
+  kind                = "FunctionApp"
   reserved            = true
 
   sku {
@@ -35,6 +35,7 @@ resource "azurerm_function_app" "branch_protection_service" {
   site_config {
     linux_fx_version = "node|14"
   }
+
   os_type = "linux"
   version = "~3"
 
@@ -48,6 +49,7 @@ resource "azurerm_function_app" "branch_protection_service" {
   lifecycle {
     ignore_changes = [
       app_settings["WEBSITE_RUN_FROM_PACKAGE"],
+      app_settings["WEBSITE_ENABLE_SYNC_UPDATE_SITE"],
     ]
   }
 }
