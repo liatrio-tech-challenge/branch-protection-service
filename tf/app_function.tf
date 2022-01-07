@@ -12,7 +12,7 @@ resource "azurerm_storage_account" "branch_protection_service" {
 }
 
 resource "azurerm_app_service_plan" "branch_protection_service" {
-  name                = "github-branch-protection-service"
+  name                = var.function_app_name
   location            = azurerm_resource_group.github_tech_challenge.location
   resource_group_name = azurerm_resource_group.github_tech_challenge.name
 
@@ -23,7 +23,7 @@ resource "azurerm_app_service_plan" "branch_protection_service" {
 }
 
 resource "azurerm_function_app" "branch_protection_service" {
-  name                       = "github-branch-protection-service"
+  name                       = var.function_app_name
   location                   = azurerm_resource_group.github_tech_challenge.location
   resource_group_name        = azurerm_resource_group.github_tech_challenge.name
   app_service_plan_id        = azurerm_app_service_plan.branch_protection_service.id

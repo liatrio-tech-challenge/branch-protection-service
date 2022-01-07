@@ -4,6 +4,11 @@ variable "location" {
   default     = "Central US"
 }
 
+variable "function_app_name" {
+  type        = string
+  description = "Name of the function app to configure"
+}
+
 variable "github_webhook_secret" {
   type        = string
   description = "Shared secret for GitHub webhook"

@@ -4,6 +4,10 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  AZURE_FUNCTION_APP_NAME: github-branch-protection-service
+  APP_PACKAGE_PATH: .
+
 jobs:
   apply:
     name: Terraform Apply
@@ -28,3 +32,33 @@ jobs:
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
           TF_VAR_github_webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
           TF_VAR_github_enforcer_pat: ${{ secrets.ENFORCER_PAT }}
+          TF_VAR_function_app_name: ${{ env.AZURE_FUNCTION_APP_NAME }}
+
+  deploy:
+    name: App Deploy
+    runs-on:
+      - ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Node Setup
+          uses: actions/setup-node@v1
+          with:
+            node-version: 12.x
+
+      - name: Resolve Project Dependencies Using Npm
+          shell: bash
+          run: |
+            npm install
+            npm run build --if-present
+            npm run test --if-present
+
+      - name: 'Run Azure Functions Action'
+          uses: Azure/functions-action@v1
+          id: fa
+          with:
+            app-name: ${{ env.AZURE_FUNCTION_APP_NAME }}
+            package: ./${{ env.APP_PACKAGE_PATH }}
+          env:
+            AZURE_RBAC_CREDENTIALS: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
