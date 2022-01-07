@@ -17,14 +17,14 @@ env:
 
 jobs:
   infra-deploy:
-    name: Terraform Apply
+    name: Terraform apply
     runs-on:
       - ubuntu-latest
     steps:
       - name: Git checkout
         uses: actions/checkout@v2
 
-      - name: Terraform Apply
+      - name: Terraform apply
         run: |
           set -o pipefail
           terraform init
@@ -49,17 +49,17 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v2
 
-      - name: Node Setup
+      - name: Node setup
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
 
-      - name: Resolve Project Dependencies Using Npm
+      - name: Yarn install
         shell: bash
         run: |
           yarn install
 
-      - name: 'Run Azure Functions Action'
+      - name: Deploy to function app
         uses: Azure/functions-action@v1
         id: fa
         with:

@@ -42,7 +42,7 @@ jobs:
           TF_VAR_function_app_name: ${{ env.AZURE_FUNCTION_APP_NAME }}
 
   plan:
-    name: Terraform Plan
+    name: Terraform plan
     runs-on:
       - ubuntu-latest
     outputs:
@@ -52,7 +52,7 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v2
 
-      - name: Terraform Plan
+      - name: Terraform plan
         run: |
           set -o pipefail
           terraform init
