@@ -4,6 +4,8 @@ on:
       - main
   workflow_dispatch:
 
+name: Terraform Plan
+
 env:
     AZURE_FUNCTION_APP_NAME: github-branch-protection-service
 

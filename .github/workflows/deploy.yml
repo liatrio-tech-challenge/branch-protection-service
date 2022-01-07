@@ -4,6 +4,8 @@ on:
       - main
   workflow_dispatch:
 
+name: Deploy
+
 env:
   AZURE_FUNCTION_APP_NAME: github-branch-protection-service
   APP_PACKAGE_PATH: .
