@@ -60,8 +60,8 @@ jobs:
             const fs = require('fs');
             const color_code_regex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
 
-            var summary = fs.readFileSync('summary.txt').toString().replace(color_code_regex, '');
-            var plan = fs.readFileSync('plan.txt').toString().replace(color_code_regex, '');
+            var summary = fs.readFileSync('tf/summary.txt').toString().replace(color_code_regex, '');
+            var plan = fs.readFileSync('tf/plan.txt').toString().replace(color_code_regex, '');
 
             if(plan.length > 65000){
               plan = `Plan too long, truncating:\n...\n${plan.slice(-65000)}`;
