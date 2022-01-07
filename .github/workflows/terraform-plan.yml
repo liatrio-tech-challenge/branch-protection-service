@@ -55,8 +55,8 @@ jobs:
           set -o pipefail
           terraform init
           terraform plan | tee plan.txt
-          grep "Plan:" plan.txt > summary.txt || true
-          if [[ -f summary.txt ]];then
+          if [[ grep "Plan:" plan.txt ]];then
+            grep "Plan:" plan.txt > summary.txt
             echo "TF_PLAN_HAS_CHANGES=true" >> $GITHUB_ENV
           fi
         id: plan
