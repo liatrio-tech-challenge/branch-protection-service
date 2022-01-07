@@ -61,25 +61,35 @@ module.exports = async (context, req) => {
 
     try {
         console.log(`Configuring branch protections for repo '${repo}'`);
-        await octokit.rest.repos.updateBranchProtection({
-            owner,
-            repo,
-            branch,
-            required_status_checks: {
-                contexts: [],
-                strict: true,
-            },
-            enforce_admins: true,
-            required_pull_request_reviews: {
-                dismiss_stale_reviews: true,
-                required_approving_review_count: 1,
-            },
-            required_linear_history: true,
-            allow_force_pushes: false,
-            allow_deletions: false,
-            required_conversation_resolution: true,
-            restrictions: null,
-        });
+
+        await Promise.all([
+            octokit.rest.repos.updateBranchProtection({
+                owner,
+                repo,
+                branch,
+                required_status_checks: {
+                    contexts: [],
+                    strict: true,
+                },
+                enforce_admins: true,
+                required_pull_request_reviews: {
+                    dismiss_stale_reviews: true,
+                    required_approving_review_count: 1,
+                },
+                required_linear_history: true,
+                allow_force_pushes: false,
+                allow_deletions: false,
+                required_conversation_resolution: true,
+                restrictions: null,
+            }),
+            octokit.rest.repos.update({
+                owner,
+                repo,
+                allow_squash_merge: true,
+                allow_merge_commit: false,
+                allow_rebase_merge: false,
+            })
+        ])
 
         console.log(`Posting issue comment for repo '${repo}'`);
         await octokit.rest.issues.create({
