@@ -4,7 +4,7 @@ and sets up an organization webhook to notify the service when a new repo is cre
 
 ### Prerequisites
 * An Azure subscription
-* A service principle with Contributor access to the subscription
+* A service principal with Contributor access to the subscription
 * A storage account with a container for state in the subscription
 * A GitHub org
 * An arbitrary shared secret
