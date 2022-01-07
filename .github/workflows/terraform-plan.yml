@@ -45,8 +45,6 @@ jobs:
     name: Terraform plan
     runs-on:
       - ubuntu-latest
-    outputs:
-      modified_terraform: ${{ steps.plan.outputs.modified_terraform }}
     needs: validate
     steps:
       - name: Git checkout
@@ -58,7 +56,9 @@ jobs:
           terraform init
           terraform plan | tee plan.txt
           grep "Plan:" plan.txt > summary.txt || true
-          echo "##[set-output name=modified_terraform;]$(cat plan.txt | grep "No changes. Infrastructure is up-to-date." || true)"
+          if [[ -f summary.txt ]];then
+            echo "TF_PLAN_HAS_CHANGES=true" >> $GITHUB_ENV
+          fi
         id: plan
         working-directory: tf
         env:
@@ -73,7 +73,7 @@ jobs:
 
       - name: Comment on pull request
         uses: actions/github-script@v3
-        if: "!contains( ${{ needs.plan.outputs.modified_terraform }}, 'No changes. Infrastructure is up-to-date.')"
+        if: ${{ env.TF_PLAN_HAS_CHANGES }}
         with:
           script: |
             const fs = require('fs');
