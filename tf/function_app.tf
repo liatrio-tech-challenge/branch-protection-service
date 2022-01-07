@@ -45,7 +45,9 @@ resource "azurerm_function_app" "branch_protection_service" {
     WEBSITE_RUN_FROM_PACKAGE : ""
   }
 
-  ignore_changes = [
-    app_settings["WEBSITE_RUN_FROM_PACKAGE"],
-  ]
+  lifecycle {
+    ignore_changes = [
+      app_settings["WEBSITE_RUN_FROM_PACKAGE"],
+    ]
+  }
 }
