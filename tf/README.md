@@ -11,7 +11,7 @@ and sets up an organization webhook to notify the service when a new repo is cre
 
 #### Secrets for workflow
 The following secrets need to be configured for the terraform plan and apply workflows to work:
-* Service principle secrets:
+* Service principal secrets:
   * ARM_CLIENT_SECRET
   * ARM_CLIENT_ID
   * ARM_SUBSCRIPTION_ID
