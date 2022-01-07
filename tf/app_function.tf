@@ -3,7 +3,7 @@ resource "azurerm_resource_group" "github_tech_challenge" {
   name     = "github-tech-challenge"
 }
 
-resource "azurerm_storage_account" "example" {
+resource "azurerm_storage_account" "branch_protection_service" {
   name                     = "liatriogithubtech"
   resource_group_name      = azurerm_resource_group.github_tech_challenge.name
   location                 = azurerm_resource_group.github_tech_challenge.location
@@ -12,7 +12,7 @@ resource "azurerm_storage_account" "example" {
 }
 
 resource "azurerm_app_service_plan" "branch_protection_service" {
-  name                = "azure-functions-test-service-plan"
+  name                = "github-branch-protection-service"
   location            = azurerm_resource_group.github_tech_challenge.location
   resource_group_name = azurerm_resource_group.github_tech_challenge.name
 
@@ -22,11 +22,11 @@ resource "azurerm_app_service_plan" "branch_protection_service" {
   }
 }
 
-resource "azurerm_function_app" "example" {
-  name                       = "test-azure-functions"
+resource "azurerm_function_app" "branch_protection_service" {
+  name                       = "github-branch-protection-service"
   location                   = azurerm_resource_group.github_tech_challenge.location
   resource_group_name        = azurerm_resource_group.github_tech_challenge.name
   app_service_plan_id        = azurerm_app_service_plan.branch_protection_service.id
-  storage_account_name       = azurerm_storage_account.example.name
-  storage_account_access_key = azurerm_storage_account.example.primary_access_key
+  storage_account_name       = azurerm_storage_account.branch_protection_service.name
+  storage_account_access_key = azurerm_storage_account.branch_protection_service.primary_access_key
 }

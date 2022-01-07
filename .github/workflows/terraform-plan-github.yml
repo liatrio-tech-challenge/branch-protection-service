@@ -38,7 +38,7 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v2
 
-      - name: Terragrunt plan
+      - name: Terraform Plan
         run: |
           set -o pipefail
           terraform init
