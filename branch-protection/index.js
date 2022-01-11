@@ -51,7 +51,7 @@ module.exports = async (context, req) => {
     const sender = req.body.sender.login;
     const owner = req.body.repository.owner.login;
     const repo = req.body.repository.name;
-    const branch = process.env.BRANCH_OVERRIDE || 'main'; // TODO: req.body.repository.default_branch is incorrect, try to query for repository
+    const branch = process.env.PROTECTED_BRANCH || 'main'; // TODO: req.body.repository.default_branch is incorrect, try to query for repository
     console.log('repo settings', {
         sender,
         owner,
